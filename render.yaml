@@ -4,7 +4,7 @@ services:
     name: expense-tracker-backend
     env: docker
     dockerContext: ./backend
-    dockerfile: Dockerfile
+    dockerfilePath: Dockerfile
     plan: free
     envVars:
       - key: DATABASE_URL
@@ -19,7 +19,7 @@ services:
     name: expense-tracker-frontend
     env: docker
     dockerContext: ./frontend
-    dockerfile: Dockerfile
+    dockerfilePath: Dockerfile
     plan: free
     envVars:
       - key: VITE_API_URL
