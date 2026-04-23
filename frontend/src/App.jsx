@@ -41,6 +41,18 @@ function App() {
     fetchExpenses(); // Refetch to get updated summary
   };
 
+  const handleDeleteExpense = async (expenseId) => {
+    if (window.confirm('Are you sure you want to delete this expense?')) {
+      try {
+        await api.delete(`/expenses/${expenseId}`);
+        fetchExpenses(); // Refetch to update list and summary
+      } catch (err) {
+        console.error('Failed to delete expense:', err);
+        alert('Failed to delete expense. Please try again.');
+      }
+    }
+  };
+
   const totalAmount = expenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
 
   const categories = [
@@ -77,7 +89,7 @@ function App() {
         </div>
       </div>
 
-      <ExpenseList expenses={expenses} loading={loading} />
+      <ExpenseList expenses={expenses} loading={loading} onDelete={handleDeleteExpense} />
     </div>
   );
 }

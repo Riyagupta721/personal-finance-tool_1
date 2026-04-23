@@ -134,6 +134,27 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.expense-list-container {
+  max-height: 450px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  margin-top: 1rem;
+}
+
+.expense-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.expense-list-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.expense-list-container::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
 .expense-list {
   display: flex;
   flex-direction: column;
@@ -147,12 +168,31 @@ button:disabled {
   padding: 1rem 1.5rem;
   background: rgba(255, 255, 255, 0.03);
   border-radius: 1rem;
-  transition: transform 0.2s;
+  transition: transform 0.2s, background 0.2s;
 }
 
 .expense-item:hover {
-  transform: scale(1.01);
+  transform: translateX(4px);
   background: rgba(255, 255, 255, 0.05);
+}
+
+.delete-btn {
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  opacity: 0;
+  transition: all 0.2s;
+}
+
+.expense-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: var(--danger) !important;
+  transform: scale(1.1);
 }
 
 .expense-info h3 {
