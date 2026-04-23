@@ -1,66 +1,117 @@
-# Production-Ready Expense Tracker
+# 💰 Reimagined Expense Tracker
 
-A full-stack application built with FastAPI, React (Vite), and PostgreSQL. Designed for resilience with idempotency handling, automatic retries, and clean architecture.
+A production-ready, full-stack personal finance tool built with a focus on **resilience**, **precision**, and **premium aesthetics**. This application is designed to handle real-world conditions like network instability and duplicate submissions while providing a beautiful user experience.
 
-## 🚀 Features
+---
 
-- **Resilient Backend**: FastAPI with SQLAlchemy and PostgreSQL.
-- **Clean Architecture**: Separation of concerns into API, Services, and Repository layers.
-- **Idempotency**: Prevents duplicate expense entries using unique idempotency keys.
-- **Modern UI**: React with glassmorphism design, dark mode, and responsive layout.
-- **Error Resilience**: Axios interceptors with exponential backoff for automatic retries on network failures.
-- **Dockerized**: Easy setup using Docker Compose.
+## 🚀 Key Features
+
+- **Resilient API**: Implements **Idempotency Keys** (`X-Idempotency-Key`) to prevent duplicate transactions if a user clicks "Submit" twice or a network retry occurs.
+- **Financial Precision**: Uses `Decimal` (Python) and `Numeric(10,2)` (SQL) to ensure 100% accuracy in financial calculations—no floating-point errors.
+- **Smart Retries**: Frontend is equipped with automated retry logic and exponential backoff to handle temporary server issues gracefully.
+- **Live Summaries**: Real-time total expenditure and category-wise breakdown displayed in a stunning glassmorphism dashboard.
+- **Search & Sort**: Instantly filter by category or sort by date to find exactly what you're looking for.
+- **Dark Mode Aesthetics**: A modern, sleek UI using vanilla CSS with custom gradients and micro-animations.
+
+---
 
 ## 🛠️ Tech Stack
 
-- **Backend**: FastAPI, SQLAlchemy, PostgreSQL, Pydantic.
-- **Frontend**: React (Vite), Axios, Lucide React, Date-fns.
-- **DevOps**: Docker, Docker Compose.
+- **Backend**: FastAPI (Python), SQLAlchemy (ORM), Pydantic (Validation).
+- **Frontend**: React, Vite, Axios (API Client), Lucide-React (Icons).
+- **Database**: PostgreSQL (Production) / SQLite (Local Development).
+- **DevOps**: Docker, Docker Compose, Render (Cloud Hosting).
 
-## 🚦 Getting Started
+---
+
+## 🏁 Getting Started
 
 ### Prerequisites
+- **Python 3.11+**
+- **Node.js 18+**
+- **Docker** (Optional, but recommended)
 
-- Docker and Docker Compose installed on your machine.
+### Option 1: Local Setup (Without Docker)
 
-### Installation
-
-1. Clone the repository.
-2. Navigate to the project root.
-3. Start the application:
+1. **Clone the repository**
    ```bash
-   docker-compose up --build
+   git clone https://github.com/YOUR_USERNAME/personal-finance-tool_1.git
+   cd personal-finance-tool_1
    ```
-4. Access the frontend at `http://localhost:3000`.
-5. Access the API documentation at `http://localhost:8000/docs`.
 
-## 🏗️ Design Decisions
+2. **Backend Setup**
+   ```bash
+   cd backend
+   python -m venv venv
+   .\venv\Scripts\activate  # Windows
+   pip install -r requirements.txt
+   uvicorn app.main:app --reload
+   ```
 
-- **Money Handling**: Used `Numeric` (Decimal) type in both database and Pydantic models to avoid floating-point precision issues.
-- **Idempotency**: Implemented `X-Idempotency-Key` header logic. The frontend generates a UUID for each new submission attempt. The backend checks if this key exists before creating a new record, ensuring that retries don't create duplicates.
-- **Clean Architecture**:
-  - `Repository`: Handles direct database interactions.
-  - `Service`: Contains business logic and orchestration.
-  - `API`: Defines endpoints and handles request/response validation.
-- **Retry Logic**: Implemented in the frontend API client. It automatically retries requests on 5xx errors or network failures with exponential backoff.
+3. **Frontend Setup**
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
 
-## 🧪 Tests
+### Option 2: One-Click Setup (With Docker)
+Just run one command from the root folder:
+```bash
+docker-compose up --build
+```
+The app will be live at `http://localhost:5173` and the API at `http://localhost:8000`.
 
-Basic unit/integration tests are included for:
-- **Creating an expense**: Ensures valid data is stored correctly.
-- **Validation (negative amount)**: Verifies that negative amounts are rejected with a 400 error.
-- **Idempotency (duplicate requests)**: Confirms that duplicate submissions with the same key don't create multiple records.
+---
 
-To run tests locally:
+## 🧪 Testing
+
+The project includes a suite of integration tests covering core business logic.
+
 ```bash
 cd backend
 pytest
 ```
+*Tests cover: Expense creation, negative amount validation, and idempotency handling.*
 
-## 📈 Future Improvements
+---
 
-- **Authentication**: Add JWT-based user authentication.
-- **Migrations**: Integrate Alembic for database schema migrations.
-- **Caching**: Use Redis for caching frequently accessed data.
-- **Unit Tests**: Add Pytest for backend and Vitest/Testing Library for frontend.
-- **Pagination**: Implement cursor-based pagination for the expense list.
+## 🚢 Deployment
+
+This project is configured for **One-Click Deployment** on [Render](https://render.com) using the included `render.yaml` Blueprint.
+
+1. Push your code to GitHub.
+2. Connect your repo to Render.
+3. Select the **Blueprint** option.
+4. Render will automatically provision your Database, Backend, and Frontend.
+
+---
+
+## 🏗️ Architecture Overview
+
+The backend follows a **Clean Layered Architecture**:
+- **API Layer**: Handles routing and request/response validation.
+- **Service Layer**: Contains business logic (idempotency checks, calculation rules).
+- **Repository Layer**: Pure data access using SQLAlchemy.
+
+The frontend uses a **Component-Based Architecture**:
+- **Atomic Components**: Reusable UI elements like `ExpenseForm` and `SummaryCards`.
+- **API Interceptors**: Centralized error handling and retry logic.
+
+---
+
+## 📊 API Documentation
+
+Once the backend is running, visit:
+- **Swagger UI**: `http://localhost:8000/docs`
+- **ReDoc**: `http://localhost:8000/redoc`
+
+---
+
+## 📈 Future Roadmap
+- [ ] JWT User Authentication.
+- [ ] Monthly Budgeting & Alerts.
+- [ ] Data Export (CSV/PDF).
+- [ ] Interactive Charts (Chart.js).
+
+Developed with ❤️ by Riyagupta721
