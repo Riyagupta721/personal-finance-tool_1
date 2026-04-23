@@ -35,4 +35,7 @@ class ExpenseService:
                 detail="Could not create expense"
             )
 
+    def get_summary(self, db: Session):
+        return expense_repo.get_summary(db)
+
 expense_service = ExpenseService()

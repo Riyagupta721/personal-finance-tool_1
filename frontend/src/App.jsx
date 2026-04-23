@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import ExpenseForm from './components/ExpenseForm';
 import ExpenseList from './components/ExpenseList';
+import SummaryCards from './components/SummaryCards';
 import api from './api';
 import { Filter, SortDesc } from 'lucide-react';
 
 function App() {
   const [expenses, setExpenses] = useState([]);
+  const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('');
   const [sort, setSort] = useState('date_desc');
@@ -17,10 +19,15 @@ function App() {
       if (filter) params.category = filter;
       params.sort = sort;
 
-      const response = await api.get('/expenses/', { params });
-      setExpenses(response.data);
+      const [expensesRes, summaryRes] = await Promise.all([
+        api.get('/expenses/', { params }),
+        api.get('/expenses/summary')
+      ]);
+      
+      setExpenses(expensesRes.data);
+      setSummary(summaryRes.data);
     } catch (err) {
-      console.error('Failed to fetch expenses:', err);
+      console.error('Failed to fetch data:', err);
     } finally {
       setLoading(false);
     }
@@ -31,8 +38,7 @@ function App() {
   }, [filter, sort]);
 
   const handleExpenseAdded = (newExpense) => {
-    // Optimistic update or just refetch
-    setExpenses([newExpense, ...expenses]);
+    fetchExpenses(); // Refetch to get updated summary
   };
 
   const totalAmount = expenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
@@ -45,16 +51,7 @@ function App() {
     <div className="container">
       <h1>Expense Tracker</h1>
 
-      <div className="stats-grid">
-        <div className="glass-card stat-card">
-          <div className="stat-label">Total Spent</div>
-          <div className="stat-value">₹{totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-        </div>
-        <div className="glass-card stat-card">
-          <div className="stat-label">Transactions</div>
-          <div className="stat-value">{expenses.length}</div>
-        </div>
-      </div>
+      <SummaryCards summary={summary} />
 
       <ExpenseForm onExpenseAdded={handleExpenseAdded} />
 

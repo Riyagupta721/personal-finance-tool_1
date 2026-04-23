@@ -38,4 +38,17 @@ class ExpenseRepository:
         db.refresh(db_expense)
         return db_expense
 
+    def get_summary(self, db: Session):
+        from sqlalchemy import func
+        total = db.query(func.sum(models.Expense.amount)).scalar() or Decimal('0')
+        categories = db.query(
+            models.Expense.category, 
+            func.sum(models.Expense.amount).label('total')
+        ).group_by(models.Expense.category).all()
+        
+        return {
+            "total": total,
+            "categories": {cat: amt for cat, amt in categories}
+        }
+
 expense_repo = ExpenseRepository()

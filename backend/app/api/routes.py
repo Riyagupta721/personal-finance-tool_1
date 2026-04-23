@@ -22,3 +22,7 @@ def create_expense(
     db: Session = Depends(get_db)
 ):
     return expense_service.add_expense(db, expense_in)
+
+@router.get("/summary")
+def get_summary(db: Session = Depends(get_db)):
+    return expense_service.get_summary(db)
