@@ -44,6 +44,19 @@ A full-stack application built with FastAPI, React (Vite), and PostgreSQL. Desig
   - `API`: Defines endpoints and handles request/response validation.
 - **Retry Logic**: Implemented in the frontend API client. It automatically retries requests on 5xx errors or network failures with exponential backoff.
 
+## 🧪 Tests
+
+Basic unit/integration tests are included for:
+- **Creating an expense**: Ensures valid data is stored correctly.
+- **Validation (negative amount)**: Verifies that negative amounts are rejected with a 400 error.
+- **Idempotency (duplicate requests)**: Confirms that duplicate submissions with the same key don't create multiple records.
+
+To run tests locally:
+```bash
+cd backend
+pytest
+```
+
 ## 📈 Future Improvements
 
 - **Authentication**: Add JWT-based user authentication.

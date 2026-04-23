@@ -64,7 +64,15 @@ const ExpenseForm = ({ onExpenseAdded }) => {
             step="0.01"
             required
             value={formData.amount}
-            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+            onChange={(e) => {
+              const val = e.target.value;
+              setFormData({ ...formData, amount: val });
+              if (parseFloat(val) <= 0) {
+                setError('Amount cannot be negative');
+              } else {
+                setError(null);
+              }
+            }}
             placeholder="0.00"
           />
         </div>
