@@ -23,7 +23,7 @@ services:
     plan: free
     buildArgs:
       - key: VITE_API_URL
-        value: https://expense-tracker-backend-061f.onrender.com
+        value: https://expense-tracker-backend-06lf.onrender.com
 
 databases:
   - name: expense-db
