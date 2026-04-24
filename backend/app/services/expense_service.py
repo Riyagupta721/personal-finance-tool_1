@@ -38,4 +38,7 @@ class ExpenseService:
     def get_summary(self, db: Session):
         return expense_repo.get_summary(db)
 
+    def delete_expense(self, db: Session, expense_id: str) -> bool:
+        return expense_repo.delete_expense(db, expense_id)
+
 expense_service = ExpenseService()

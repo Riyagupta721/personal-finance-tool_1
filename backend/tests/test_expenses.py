@@ -75,3 +75,30 @@ def test_idempotency():
     response2 = client.post("/expenses/", json=payload)
     assert response2.status_code == 201
     assert response2.json()["id"] == id1 # Should return same record
+
+def test_delete_expense():
+    # Create an expense
+    create_resp = client.post(
+        "/expenses/",
+        json={
+            "amount": 200.00,
+            "category": "Shopping",
+            "description": "Shoes",
+            "date": "2024-04-23T12:00:00Z"
+        }
+    )
+    expense_id = create_resp.json()["id"]
+    
+    # Delete it
+    delete_resp = client.delete(f"/expenses/{expense_id}")
+    assert delete_resp.status_code == 204
+    
+    # Verify it's gone
+    get_resp = client.get("/expenses/")
+    expenses = get_resp.json()
+    assert not any(e["id"] == expense_id for e in expenses)
+
+def test_delete_nonexistent_expense():
+    non_existent_uuid = str(uuid.uuid4())
+    response = client.delete(f"/expenses/{non_existent_uuid}")
+    assert response.status_code == 404

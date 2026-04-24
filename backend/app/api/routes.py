@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, status, HTTPException
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.db.database import get_db
@@ -26,3 +26,13 @@ def create_expense(
 @router.get("/summary")
 def get_summary(db: Session = Depends(get_db)):
     return expense_service.get_summary(db)
+
+@router.delete("/{expense_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_expense(expense_id: str, db: Session = Depends(get_db)):
+    success = expense_service.delete_expense(db, expense_id)
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Expense not found"
+        )
+    return None

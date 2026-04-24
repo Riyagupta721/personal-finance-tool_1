@@ -51,4 +51,12 @@ class ExpenseRepository:
             "categories": {cat: amt for cat, amt in categories}
         }
 
+    def delete_expense(self, db: Session, expense_id: str) -> bool:
+        db_expense = db.query(models.Expense).filter(models.Expense.id == expense_id).first()
+        if db_expense:
+            db.delete(db_expense)
+            db.commit()
+            return True
+        return False
+
 expense_repo = ExpenseRepository()
